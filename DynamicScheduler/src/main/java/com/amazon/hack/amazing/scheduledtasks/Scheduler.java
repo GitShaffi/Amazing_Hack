@@ -1,8 +1,10 @@
 package com.amazon.hack.amazing.scheduledtasks;
 
+import com.amazon.hack.amazing.UpstreamServer;
 import com.amazon.hack.amazing.model.ItemBean;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,9 +13,12 @@ public class Scheduler {
     HashMap<String, ConcurrentHashMap<String, ConcurrentHashMap<String, ItemBean>>> priorityMap = null;
 
     public void schedule(List<ItemBean> itemBeans) {
-        ConcurrentHashMap<String, ItemBean> itemMap;
-        ConcurrentHashMap<String, ConcurrentHashMap<String, ItemBean>> merchantMap;
-        HashMap<String, ConcurrentHashMap<String, ConcurrentHashMap<String, ItemBean>>> priorityMap = new HashMap<String, ConcurrentHashMap<String, ConcurrentHashMap<String, ItemBean>>>();
+        List<ItemBean> itemList;
+        List<ItemBean> recycleItemList = new ArrayList<ItemBean>();
+        List<String> itemIds = new ArrayList<String>();
+
+        ConcurrentHashMap<String, List<ItemBean>> merchantMap;
+        HashMap<String, ConcurrentHashMap<String, List<ItemBean>>> priorityMap = new HashMap<String, ConcurrentHashMap<String, List<ItemBean>>>();
         String[] priorities = new String[]{"Highest", "High", "Normal", "Low", "Lowest"};
         BatchScheduler batchScheduler = new BatchScheduler();
         // use comma as separator
@@ -21,40 +26,41 @@ public class Scheduler {
             if (priorityMap.containsKey(itemBean.getPriority())) {
                 merchantMap = priorityMap.get(itemBean.getPriority());
                 if (merchantMap.containsKey(itemBean.getMerchantID())) {
-                    itemMap = merchantMap.get(itemBean.getMerchantID());
-                    itemMap.put(itemBean.getItemID(), itemBean);
+                    itemList = merchantMap.get(itemBean.getMerchantID());
+                    if (itemIds.contains(itemBean.getItemID())) {
+                        recycleItemList.add(itemBean);
+                    } else {
+                        itemList.add(itemBean);
+                        itemIds.add(itemBean.getItemID());
+                    }
                 } else {
-                    itemMap = new ConcurrentHashMap<String, ItemBean>();
-                    itemMap.put(itemBean.getItemID(), itemBean);
-                    merchantMap.put(itemBean.getMerchantID(), itemMap);
+                    if (itemIds.contains(itemBean.getItemID())) {
+                        recycleItemList.add(itemBean);
+                    } else {
+                        itemList = new ArrayList<ItemBean>();
+                        itemList.add(itemBean);
+                        itemIds.add(itemBean.getItemID());
+                        merchantMap.put(itemBean.getMerchantID(), itemList);
+                    }
                 }
             } else {
-                for (int j = 0; j <= 4; j++) {
-                    if (!priorities[j].equals( itemBean.getPriority()))
-                        if (priorityMap.containsKey(priorities[j])) {
-                            merchantMap = priorityMap.get(itemBean.getPriority());
-                            if(merchantMap!=null) {
-                                if (merchantMap.containsKey(itemBean.getMerchantID())) {
-                                    itemMap = merchantMap.get(itemBean.getMerchantID());
-                                    ItemBean swapItem = itemMap.get(itemBean.getItemID());
-                                    if (swapItem.getDataType().equals(itemBean.getDataType()) && swapItem.getMerchantID().equals(itemBean.getMerchantID())) {
-                                        if (itemBean.getPayLoad() > swapItem.getPayLoad()) {
-                                            itemBean.setPayLoad(swapItem.getPayLoad());
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
+                if (itemIds.contains(itemBean.getItemID())) {
+                    recycleItemList.add(itemBean);
+                } else {
+                    itemList = new ArrayList<ItemBean>();
+                    itemList.add(itemBean);
+                    itemIds.add(itemBean.getItemID());
+                    merchantMap = new ConcurrentHashMap<String, List<ItemBean>>();
+                    merchantMap.put(itemBean.getMerchantID(), itemList);
+                    priorityMap.put(itemBean.getPriority(), merchantMap);
                 }
-                merchantMap = new ConcurrentHashMap<String, ConcurrentHashMap<String, ItemBean>>();
-                itemMap = new ConcurrentHashMap<String, ItemBean>();
-                itemMap.put(itemBean.getItemID(), itemBean);
-                merchantMap.put(itemBean.getMerchantID(), itemMap);
-                priorityMap.put(itemBean.getPriority(), merchantMap);
             }
         }
         System.out.println("complete map == " + priorityMap);
         batchScheduler.createBatch(priorityMap);
+        System.out.println("Recycle list -- " + recycleItemList);
+        if(recycleItemList!=null && !recycleItemList.isEmpty())
+            UpstreamServer.addToQueue(recycleItemList);
+        recycleItemList = null;
     }
 }
