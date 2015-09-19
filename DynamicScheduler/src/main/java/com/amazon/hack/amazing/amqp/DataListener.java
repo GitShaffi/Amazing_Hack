@@ -1,7 +1,11 @@
 package com.amazon.hack.amazing.amqp;
 
+import com.amazon.hack.amazing.model.ItemBean;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
+
+import java.io.IOException;
+
 /**
  * This class implements org.springframework.amqp.core.MessageListener.
  *  It is tied to DATA_EXCHANGE and listing to an anonomous queue
@@ -13,8 +17,15 @@ public DataListener(){
 	System.out.println("\n\ncreating DataListener...\n\n");
 }
 	public void onMessage(Message message) {
-	String messageBody= new String(message.getBody());
-		System.out.println("\n\nListener received message----->"+messageBody+"\n\n");
+		ItemBean messageBody= null;
+		try {
+			messageBody = ItemBean.deserialize(message.getBody());
+			System.out.println("\n\nListener received message----->"+messageBody.getItemID()+"\n\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
 //end of DataListener.

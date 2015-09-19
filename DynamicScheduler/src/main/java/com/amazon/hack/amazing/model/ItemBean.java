@@ -1,9 +1,13 @@
 package com.amazon.hack.amazing.model;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class ItemBean implements Comparator<ItemBean>,Comparable<ItemBean>{
+public class ItemBean implements Comparator<ItemBean>,Comparable<ItemBean>, Serializable{
     String itemID;
     String merchantID;
     String marketPlaceID;
@@ -88,6 +92,23 @@ public class ItemBean implements Comparator<ItemBean>,Comparable<ItemBean>{
             return -1;
         else
             return 1;
+    }
+
+    public static ItemBean deserialize(byte[] data) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream in = new ByteArrayInputStream(data);
+        ObjectInputStream is = new ObjectInputStream(in);
+        return (ItemBean) is.readObject();
+    }
+
+    @Override
+    public String toString() {
+        return "ItemBean{" +
+                "itemID='" + itemID + '\'' +
+                ", merchantID='" + merchantID + '\'' +
+                ", marketPlaceID='" + marketPlaceID + '\'' +
+                ", priority='" + priority + '\'' +
+                ", dataType='" + dataType + '\'' +
+                '}';
     }
 }
 

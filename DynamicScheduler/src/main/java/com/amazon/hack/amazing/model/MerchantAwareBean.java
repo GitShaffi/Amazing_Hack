@@ -3,9 +3,6 @@ package com.amazon.hack.amazing.model;
 import java.sql.Timestamp;
 import java.util.Date;
 
-/**
- * Created by Shaffi on 19-09-2015.
- */
 public class MerchantAwareBean {
     String MerchantId;
     Timestamp currentTimeStamp;
