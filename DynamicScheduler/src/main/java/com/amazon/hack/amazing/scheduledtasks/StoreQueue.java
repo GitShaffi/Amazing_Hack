@@ -11,7 +11,7 @@ public class StoreQueue {
 
     public void batchQueue(File csv){
         Scheduler scheduler = new Scheduler();
-        HashMap<String, HashMap<String, HashMap<String,ItemBean>>> priorityMap = scheduler.schedule(csv);
+        //HashMap<String, HashMap<String, HashMap<String,ItemBean>>> priorityMap = scheduler.schedule(csv);
 
 
     }

@@ -1,10 +1,12 @@
 package com.amazon.hack.amazing.amqp;
 
 import com.amazon.hack.amazing.model.ItemBean;
+import com.amazon.hack.amazing.scheduledtasks.Scheduler;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * This class implements org.springframework.amqp.core.MessageListener.
@@ -13,14 +15,17 @@ import java.io.IOException;
  *  my.routingkey.1  specified in rabbt-listener-contet.xml file.
  */
 public class DataListener implements MessageListener {
+	static Scheduler scheduler = new Scheduler();
 public DataListener(){
 	System.out.println("\n\ncreating DataListener...\n\n");
 }
+
 	public void onMessage(Message message) {
-		ItemBean itemBean= null;
+		List<ItemBean> itemBeans= null;
 		try {
-			itemBean = ItemBean.deserialize(message.getBody());
-			System.out.println("\n\nListener received message----->"+itemBean.getItemID()+"\n\n");
+			itemBeans = ItemBean.deserialize(message.getBody());
+			scheduler.schedule(itemBeans);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

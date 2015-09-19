@@ -25,7 +25,7 @@ public class ItemSchedulerAction implements ServletContextAware {
         Scheduler queue = new Scheduler();
         int count = 0;
         List<ItemBean> upstreamQueue = new ArrayList<ItemBean>();
-        prioritizedItems = queue.schedule(new File(TEST_FILE));
+       // prioritizedItems = queue.schedule(new File(TEST_FILE));
        /* ItemBean firstItem = prioritizedItems.first();
         MerchantAwareBean merchantAware;
         int stopLoading = 10;

@@ -41,7 +41,7 @@ public class BatchScheduler {
                         it.remove();
                     }
                 }
-                //sendData to process and make it null
+                System.out.println("The final value nu nenaikaran : " + batch);
 
             }
     }

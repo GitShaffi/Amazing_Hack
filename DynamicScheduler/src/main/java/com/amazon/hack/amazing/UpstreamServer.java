@@ -5,6 +5,8 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.List;
+
 /**
  * to the DATA-EXCHANGE configured in the rabbt-listener-contet.xml file with the routing key
  * "my.routingkey.1"
@@ -21,7 +23,7 @@ public class UpstreamServer {
 //			mq.convertAndSend("my.routingkey.1", "Message # " + i + " on " + new Date());// send
     }
 
-    public static void addToQueue(ItemBean bean) {
+    public static void addToQueue(List<ItemBean> bean) {
         if (mq == null) {
             ApplicationContext context = new ClassPathXmlApplicationContext("rabbit-sender-context.xml");//loading beans
             mq = (AmqpTemplate) context.getBean("dataTemplate");

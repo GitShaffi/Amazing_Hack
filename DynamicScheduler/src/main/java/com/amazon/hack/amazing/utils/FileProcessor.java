@@ -18,11 +18,9 @@ public class FileProcessor {
         Thread.sleep(random.nextInt(10) * 500);
         logger.info("Processing File: " + file);
         final List<ItemBean> itemBeans = CsvParser.readCSV(file);
-        for (ItemBean itemBean : itemBeans) {
-            if (itemBean != null) {
-                System.out.println("Sending ------ " + itemBean);
-                UpstreamServer.addToQueue(itemBean);
-            }
+            if (itemBeans != null) {
+                System.out.println("Sending ------ " + itemBeans);
+                UpstreamServer.addToQueue(itemBeans);
         }
         return file.delete();
     }
