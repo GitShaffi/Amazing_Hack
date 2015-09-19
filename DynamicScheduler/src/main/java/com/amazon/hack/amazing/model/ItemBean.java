@@ -12,8 +12,14 @@ public class ItemBean implements Comparator<ItemBean>,Comparable<ItemBean>, Seri
     String merchantID;
     String marketPlaceID;
     String priority;
-    String dataType;
 
+
+    String dataType;
+    int payLoad;
+
+    public int getPayLoad() {
+        return payLoad;
+    }
     public String getItemID() {
         return itemID;
     }
@@ -109,6 +115,10 @@ public class ItemBean implements Comparator<ItemBean>,Comparable<ItemBean>, Seri
                 ", priority='" + priority + '\'' +
                 ", dataType='" + dataType + '\'' +
                 '}';
+    }
+
+    public void setPayLoad(int payLoad) {
+        this.payLoad = payLoad;
     }
 }
 

@@ -2,6 +2,7 @@ package com.amazon.hack.amazing.controller;
 
 import com.amazon.hack.amazing.model.ItemBean;
 import com.amazon.hack.amazing.model.MerchantAwareBean;
+import com.amazon.hack.amazing.scheduledtasks.Scheduler;
 import com.amazon.hack.amazing.scheduledtasks.StoreQueue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,10 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 @RestController
 public class ItemSchedulerAction implements ServletContextAware {
@@ -24,12 +22,12 @@ public class ItemSchedulerAction implements ServletContextAware {
     @RequestMapping("/getBatch")
     String schedule(HttpServletRequest request, HttpServletResponse response) {//@RequestParam String filterID, @RequestParam String filterValue){
         ServletContext context = request.getSession().getServletContext();
-        TreeSet<ItemBean> prioritizedItems = null;
-        StoreQueue queue = new StoreQueue();
+        HashMap<String, HashMap<String, HashMap<String,ItemBean>>> prioritizedItems = null;
+        Scheduler queue = new Scheduler();
         int count = 0;
         List<ItemBean> upstreamQueue = new ArrayList<ItemBean>();
-        prioritizedItems = (TreeSet<ItemBean>) queue.readCSV(new File(TEST_FILE));
-        ItemBean firstItem = prioritizedItems.first();
+        prioritizedItems =  queue.schedule(new File(TEST_FILE));
+       /* ItemBean firstItem = prioritizedItems.first();
         MerchantAwareBean merchantAware;
         int stopLoading = 10;
         merchantAware = (MerchantAwareBean) context.getAttribute("merchant");
@@ -54,10 +52,10 @@ public class ItemSchedulerAction implements ServletContextAware {
         merchantAware.setPayLoad(count);
         context.setAttribute("merchant", merchantAware);
 
-        return null;
+       */ return null;
     }
 
-    boolean load(MerchantAwareBean merchantAware, String merchantId) {
+   /* boolean load(MerchantAwareBean merchantAware, String merchantId) {
         int stopLoading = 10;
         boolean flag = true;
         if (merchantAware != null) {
@@ -74,7 +72,7 @@ public class ItemSchedulerAction implements ServletContextAware {
         }
         return flag;
     }
-
+*/
 
     @Override
     public void setServletContext(ServletContext servletContext) {
