@@ -3,10 +3,7 @@ package com.amazon.hack.amazing.model;
 
 import java.util.Comparator;
 
-/**
- * Created by Shaffi on 19-09-2015.
- */
-public class ItemBean implements Comparator<ItemBean>{
+public class ItemBean implements Comparator<ItemBean>,Comparable<ItemBean>{
     String itemID;
     String merchantID;
     String marketPlaceID;
@@ -78,6 +75,16 @@ public class ItemBean implements Comparator<ItemBean>{
         if(priority(o1.getPriority())==priority(o2.getPriority()))
             return 0;
         else if(priority(o1.getPriority())<priority(o2.getPriority()))
+            return -1;
+        else
+            return 1;
+    }
+
+    @Override
+    public int compareTo(ItemBean o) {
+        if(priority(getPriority())==priority(o.getPriority()))
+            return 0;
+        else if(priority(getPriority())<priority(o.getPriority()))
             return -1;
         else
             return 1;

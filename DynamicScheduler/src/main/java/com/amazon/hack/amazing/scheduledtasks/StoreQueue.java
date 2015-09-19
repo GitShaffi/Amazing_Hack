@@ -2,16 +2,13 @@ package com.amazon.hack.amazing.scheduledtasks;
 
 import com.amazon.hack.amazing.model.ItemBean;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
+import java.io.*;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class StoreQueue {
 
-    public Set readCSV(){
-        String csvFile = "/Users/mkyong/Downloads/GeoIPCountryWhois.csv";
+    public Set readCSV(File csvFile) {
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";
