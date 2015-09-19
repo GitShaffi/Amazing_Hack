@@ -9,20 +9,17 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class StoreQueue {
 
-    public HashMap readCSV(){
+    public Set readCSV(){
         String csvFile = "/Users/mkyong/Downloads/GeoIPCountryWhois.csv";
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";
-        HashMap<String,List<ItemBean>> itemQueue = new HashMap<String,List<ItemBean>>();
         ItemBean items = null;
-        List<ItemBean> itemList = new ArrayList<ItemBean>();
+        TreeSet<ItemBean> prioritizedItem = new TreeSet<ItemBean>();
         try {
 
             br = new BufferedReader(new FileReader(csvFile));
@@ -36,20 +33,10 @@ public class StoreQueue {
                 items.setMarketPlaceID(item[2]);
                 items.setPriority(item[3]);
                 items.setDataType(item[4]);
-                for(int i=0;i<5;i++){
-                    if(itemQueue.containsKey(item[i])){
-                        itemList = itemQueue.get(item[i]);
-                        itemList.add(items);
-                    }
-                    else{
-                        itemList = new ArrayList<ItemBean>();
-                        itemList.add(items);
-                        itemQueue.put(item[i],itemList);
-                    }
-                }
+                prioritizedItem.add(items);
 
             }
-            return itemQueue;
+            return prioritizedItem;
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
