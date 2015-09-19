@@ -7,7 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Create a template of the tutorial bean defined in the XML file and send 10 message 
- * to the TUTORIAL-EXCHANGE configured in the rabbt-listener-contet.xml file with the routing key
+ * to the DATA-EXCHANGE configured in the rabbt-listener-contet.xml file with the routing key
  *"my.routingkey.1"
  *
  */

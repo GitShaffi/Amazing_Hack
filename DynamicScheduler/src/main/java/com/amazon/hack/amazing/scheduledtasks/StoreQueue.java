@@ -1,8 +1,5 @@
 package com.amazon.hack.amazing.scheduledtasks;
 
-/**
- * Created by Shaffi on 19-09-2015.
- */
 import com.amazon.hack.amazing.model.ItemBean;
 
 import java.io.BufferedReader;
