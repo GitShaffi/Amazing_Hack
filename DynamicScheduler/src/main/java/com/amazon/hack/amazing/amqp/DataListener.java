@@ -17,10 +17,10 @@ public DataListener(){
 	System.out.println("\n\ncreating DataListener...\n\n");
 }
 	public void onMessage(Message message) {
-		ItemBean messageBody= null;
+		ItemBean itemBean= null;
 		try {
-			messageBody = ItemBean.deserialize(message.getBody());
-			System.out.println("\n\nListener received message----->"+messageBody.getItemID()+"\n\n");
+			itemBean = ItemBean.deserialize(message.getBody());
+			System.out.println("\n\nListener received message----->"+itemBean.getItemID()+"\n\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

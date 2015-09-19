@@ -5,9 +5,6 @@ import com.amazon.hack.amazing.model.ItemBean;
 import java.io.*;
 import java.util.HashMap;
 
-/**
- * Created by Shaffi on 19-09-2015.
- */
 public class Scheduler {
     HashMap<String, HashMap<String, HashMap<String,ItemBean>>> priorityMap = null;
     public HashMap<String, HashMap<String, HashMap<String,ItemBean>>> schedule(File csvFile){

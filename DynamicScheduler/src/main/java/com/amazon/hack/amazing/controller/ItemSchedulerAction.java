@@ -1,9 +1,7 @@
 package com.amazon.hack.amazing.controller;
 
 import com.amazon.hack.amazing.model.ItemBean;
-import com.amazon.hack.amazing.model.MerchantAwareBean;
 import com.amazon.hack.amazing.scheduledtasks.Scheduler;
-import com.amazon.hack.amazing.scheduledtasks.StoreQueue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.ServletContextAware;
@@ -12,8 +10,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 public class ItemSchedulerAction implements ServletContextAware {
@@ -22,11 +21,11 @@ public class ItemSchedulerAction implements ServletContextAware {
     @RequestMapping("/getBatch")
     String schedule(HttpServletRequest request, HttpServletResponse response) {//@RequestParam String filterID, @RequestParam String filterValue){
         ServletContext context = request.getSession().getServletContext();
-        HashMap<String, HashMap<String, HashMap<String,ItemBean>>> prioritizedItems = null;
+        HashMap<String, HashMap<String, HashMap<String, ItemBean>>> prioritizedItems = null;
         Scheduler queue = new Scheduler();
         int count = 0;
         List<ItemBean> upstreamQueue = new ArrayList<ItemBean>();
-        prioritizedItems =  queue.schedule(new File(TEST_FILE));
+        prioritizedItems = queue.schedule(new File(TEST_FILE));
        /* ItemBean firstItem = prioritizedItems.first();
         MerchantAwareBean merchantAware;
         int stopLoading = 10;
@@ -52,7 +51,8 @@ public class ItemSchedulerAction implements ServletContextAware {
         merchantAware.setPayLoad(count);
         context.setAttribute("merchant", merchantAware);
 
-       */ return null;
+       */
+        return null;
     }
 
    /* boolean load(MerchantAwareBean merchantAware, String merchantId) {
