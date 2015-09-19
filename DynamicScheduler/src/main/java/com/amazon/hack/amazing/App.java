@@ -1,17 +1,15 @@
 package com.amazon.hack.amazing;
 
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-@SpringBootApplication
-@EnableScheduling
 public class App {
+	
+	public static void main(String[] args) {
 
-    public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(App.class, args);
-    }
+		String springConfig = "spring/batch/jobs/job-report.xml";
 
+		ApplicationContext context = new ClassPathXmlApplicationContext(springConfig);
+
+	}
 }
