@@ -5,15 +5,15 @@ import com.amazon.hack.amazing.model.ItemBean;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Scheduler {
-    HashMap<String, HashMap<String, HashMap<String, ItemBean>>> priorityMap = null;
+    HashMap<String, ConcurrentHashMap<String, ConcurrentHashMap<String, ItemBean>>> priorityMap = null;
 
     public void schedule(List<ItemBean> itemBeans) {
-        ItemBean items = null;
-        HashMap<String, ItemBean> itemMap = null;
-        HashMap<String, HashMap<String, ItemBean>> merchantMap = null;
-        HashMap<String, HashMap<String, HashMap<String, ItemBean>>> priorityMap = null;
+        ConcurrentHashMap<String, ItemBean> itemMap;
+        ConcurrentHashMap<String, ConcurrentHashMap<String, ItemBean>> merchantMap;
+        HashMap<String, ConcurrentHashMap<String, ConcurrentHashMap<String, ItemBean>>> priorityMap = new HashMap<String, ConcurrentHashMap<String, ConcurrentHashMap<String, ItemBean>>>();
         String[] priorities = new String[]{"Highest", "High", "Normal", "Low", "Lowest"};
         BatchScheduler batchScheduler = new BatchScheduler();
         // use comma as separator
@@ -22,37 +22,39 @@ public class Scheduler {
                 merchantMap = priorityMap.get(itemBean.getPriority());
                 if (merchantMap.containsKey(itemBean.getMerchantID())) {
                     itemMap = merchantMap.get(itemBean.getMerchantID());
-                    itemMap.put(itemBean.getItemID(), items);
+                    itemMap.put(itemBean.getItemID(), itemBean);
                 } else {
-                    itemMap = new HashMap<String, ItemBean>();
-                    itemMap.put(itemBean.getItemID(), items);
+                    itemMap = new ConcurrentHashMap<String, ItemBean>();
+                    itemMap.put(itemBean.getItemID(), itemBean);
                     merchantMap.put(itemBean.getMerchantID(), itemMap);
                 }
             } else {
                 for (int j = 0; j <= 4; j++) {
-                    if (priorities[j] != itemBean.getPriority())
+                    if (!priorities[j].equals( itemBean.getPriority()))
                         if (priorityMap.containsKey(priorities[j])) {
                             merchantMap = priorityMap.get(itemBean.getPriority());
-                            if (merchantMap.containsKey(itemBean.getMerchantID())) {
-                                itemMap = merchantMap.get(itemBean.getMerchantID());
-                                ItemBean swapItem = itemMap.get(itemBean.getItemID());
-                                if (swapItem.getDataType().equals(itemBean.getDataType()) && swapItem.getMerchantID().equals(itemBean.getMerchantID())) {
-                                    if (items.getPayLoad() > swapItem.getPayLoad()) {
-                                        items.setPayLoad(swapItem.getPayLoad());
-                                    }
+                            if(merchantMap!=null) {
+                                if (merchantMap.containsKey(itemBean.getMerchantID())) {
+                                    itemMap = merchantMap.get(itemBean.getMerchantID());
+                                    ItemBean swapItem = itemMap.get(itemBean.getItemID());
+                                    if (swapItem.getDataType().equals(itemBean.getDataType()) && swapItem.getMerchantID().equals(itemBean.getMerchantID())) {
+                                        if (itemBean.getPayLoad() > swapItem.getPayLoad()) {
+                                            itemBean.setPayLoad(swapItem.getPayLoad());
+                                        }
 
+                                    }
                                 }
                             }
                         }
                 }
-                merchantMap = new HashMap<String, HashMap<String, ItemBean>>();
-                itemMap = new HashMap<String, ItemBean>();
-                itemMap.put(itemBean.getItemID(), items);
+                merchantMap = new ConcurrentHashMap<String, ConcurrentHashMap<String, ItemBean>>();
+                itemMap = new ConcurrentHashMap<String, ItemBean>();
+                itemMap.put(itemBean.getItemID(), itemBean);
                 merchantMap.put(itemBean.getMerchantID(), itemMap);
                 priorityMap.put(itemBean.getPriority(), merchantMap);
             }
         }
-
+        System.out.println("complete map == " + priorityMap);
         batchScheduler.createBatch(priorityMap);
     }
 }

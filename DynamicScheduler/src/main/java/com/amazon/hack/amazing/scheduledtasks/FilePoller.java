@@ -17,7 +17,7 @@ public class FilePoller {
     private Logger logger = Logger.getLogger(FilePoller.class.getSimpleName());
     private PollableChannel filesOutChannel;
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 360000)
     public void createFile() throws IOException, InterruptedException {
         logger.info("\n\n#### Starting Sequential processing test ####");
         logger.info("Populating directory with files");
@@ -30,13 +30,18 @@ public class FilePoller {
             File file = new File("input/file_" + i + ".txt");
             logger.info(file.getAbsolutePath());
             BufferedWriter out = new BufferedWriter(new FileWriter(file));
-            out.write("ITEM1,12345,4,LOW,ITEM\n");
-            out.write("ITEM2,12645,1,HIGH,PRICE\n");
-            out.write("ITEM3,17345,4,LOW,AUX_ITEM\n");
-            out.write("ITEM2,12645,5,LOWEST,ITEM\n");
-            out.write("ITEM3,19345,4,HIGHEST,AUX_ITEM\n");
-            out.write("ITEM1,12345,4,NORMAL,ITEM\n");
-            out.write("ITEM1,12345,4,LOW,ITEM");
+            out.write("ITEM1,12345,4,Low,ITEM\n");
+            out.write("ITEM2,12346,1,High,PRICE\n");
+            out.write("ITEM3,12344,4,Low,AUX_ITEM\n");
+            out.write("ITEM4,12342,5,Lowest,ITEM\n");
+            out.write("ITEM2,12347,5,Lowest,ITEM\n");
+            out.write("ITEM3,12341,4,Highest,AUX_ITEM\n");
+            out.write("ITEM6,12349,4,Highest,AUX_ITEM\n");
+            out.write("ITEM3,23452,4,Highest,AUX_ITEM\n");
+            out.write("ITEM1,12345,4,Normal,ITEM\n");
+            out.write("ITEM3,12346,4,Normal,ITEM\n");
+            out.write("ITEM1,12348,4,Normal,ITEM\n");
+            out.write("ITEM2,12345,4,Low,ITEM");
             out.close();
         }
         logger.info("Populated directory with files");
