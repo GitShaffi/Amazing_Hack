@@ -1,40 +1,72 @@
 package com.amazon.hack.amazing.controller;
 
+import com.amazon.hack.amazing.utils.FileUploader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.*;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Handles requests for the application home page.
  */
 @RestController
 public class HomeController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
 
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-		String formattedDate = dateFormat.format(date);
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String home(Locale locale) {
+        logger.info("Welcome home! The client locale is {}.", locale);
+        return "home";
+    }
 
-		model.addAttribute("serverTime", formattedDate );
+    /*
+* CSV flights file upload
+*/
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    String provideUploadInfo() {
+        return "You can upload a file by posting to this same URL.";
+    }
 
-		return "home";
-	}
-	
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String handleFileUpload(@RequestParam("name") String name,
+                            @RequestParam("file") MultipartFile file) {
+
+        if (!file.isEmpty()) {
+            try {
+               convert(file);
+                return "You successfully uploaded " + name;
+            } catch (Exception e) {
+                return "You failed to upload " + name + " => " + e.getMessage();
+            }
+        } else {
+            return "You failed to upload " + name + " because the file was empty.";
+        }
+    }
+
+    @RequestMapping(value = "/dummyFileUpload", method = RequestMethod.GET)
+    public String dummyUpload() {
+        FileUploader.upload();
+        return "File Upladed Successfully";
+    }
+
+    private File convert(MultipartFile file) throws IOException {
+        File convFile = new File(file.getOriginalFilename());
+        convFile.createNewFile();
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return convFile;
+    }
+
 }
