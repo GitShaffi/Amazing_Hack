@@ -22,12 +22,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="DynamicScheduler" />
         <module name="SlackMailer" />
+      </profile>
+      <profile default="false" name="Annotation profile for DynamicScheduler" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="DynamicScheduler" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="DynamicScheduler" target="1.8" />
+      <module name="DynamicScheduler" target="1.6" />
       <module name="SlackMailer" target="1.8" />
     </bytecodeTargetLevel>
   </component>
