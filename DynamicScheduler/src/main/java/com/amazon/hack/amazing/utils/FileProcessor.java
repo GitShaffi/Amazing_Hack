@@ -18,7 +18,9 @@ public class FileProcessor {
         Thread.sleep(random.nextInt(10) * 500);
         logger.info("Processing File: " + file);
         final List<ItemBean> itemBean = CsvParser.readCSV(file);
-        itemBeans.addAll(itemBean);
+        synchronized(ItemBean.class) {
+            itemBeans.addAll(itemBean);
+        }
         return file.delete();
     }
 }

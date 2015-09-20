@@ -20,6 +20,7 @@ public class Scheduler {
         ConcurrentHashMap<String, List<ItemBean>> merchantMap;
         HashMap<String, ConcurrentHashMap<String, List<ItemBean>>> priorityMap = new HashMap<String, ConcurrentHashMap<String, List<ItemBean>>>();
         String[] priorities = new String[]{"Highest", "High", "Normal", "Low", "Lowest"};
+
         BatchScheduler batchScheduler = new BatchScheduler();
         // use comma as separator
         for(ItemBean itemBean:itemBeans) {
