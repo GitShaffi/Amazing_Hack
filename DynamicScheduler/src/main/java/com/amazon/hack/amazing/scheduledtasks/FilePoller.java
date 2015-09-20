@@ -33,17 +33,17 @@ public class FilePoller {
             logger.info(file.getAbsolutePath());
             BufferedWriter out = new BufferedWriter(new FileWriter(file));
             out.write("ITEM1,12345,4,Low,ITEM\n");
-            out.write("ITEM2,12345,1,High,PRICE\n");
-            out.write("ITEM2,12345,4,Low,AUX_ITEM\n");
-            out.write("ITEM4,12345,5,Lowest,ITEM\n");
-            out.write("ITEM2,12345,5,Lowest,ITEM\n");
-            out.write("ITEM3,12345,4,Highest,AUX_ITEM\n");
-            out.write("ITEM6,12345,4,Highest,AUX_ITEM\n");
-            out.write("ITEM3,12345,4,Highest,AUX_ITEM\n");
-            out.write("ITEM1,12345,4,Normal,ITEM\n");
-            out.write("ITEM3,12345,4,Normal,ITEM\n");
-            out.write("ITEM1,12345,4,Normal,ITEM\n");
-            out.write("ITEM2,12345,4,Low,ITEM");
+            out.write("ITEM2,12341,1,High,PRICE\n");
+            out.write("ITEM2,12342,4,Low,AUX_ITEM\n");
+            out.write("ITEM4,12343,5,Lowest,ITEM\n");
+            out.write("ITEM2,12344,5,Lowest,ITEM\n");
+            out.write("ITEM3,12346,4,Highest,AUX_ITEM\n");
+            out.write("ITEM6,12347,4,Highest,AUX_ITEM\n");
+            out.write("ITEM3,12342,4,Highest,AUX_ITEM\n");
+            out.write("ITEM1,12341,4,Normal,ITEM\n");
+            out.write("ITEM3,12343,4,Normal,ITEM\n");
+            out.write("ITEM1,12344,4,Normal,ITEM\n");
+            out.write("ITEM2,12347,4,Low,ITEM");
             out.close();
         }
         logger.info("Populated directory with files");
