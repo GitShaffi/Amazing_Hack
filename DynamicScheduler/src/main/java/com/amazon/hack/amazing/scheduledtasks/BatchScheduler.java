@@ -60,6 +60,7 @@ public class BatchScheduler {
                 i++;
         }
         System.out.println("Final Batch :" + batch);
+        UpstreamServer.pushToDownstream(batch);
         if (recycleList != null && !recycleList.isEmpty()) {
             UpstreamServer.addToQueue(recycleList);
             recycleList.clear();

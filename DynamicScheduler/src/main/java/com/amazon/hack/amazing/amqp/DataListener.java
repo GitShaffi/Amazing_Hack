@@ -16,12 +16,13 @@ import java.util.List;
  */
 public class DataListener implements MessageListener {
 	static Scheduler scheduler = new Scheduler();
-public DataListener(){
-	System.out.println("\n\ncreating DataListener...\n\n");
-}
+
+	public DataListener() {
+		System.out.println("\n\ncreating DataListener...\n\n");
+	}
 
 	public void onMessage(Message message) {
-		List<ItemBean> itemBeans= null;
+		List<ItemBean> itemBeans = null;
 		try {
 			itemBeans = ItemBean.deserialize(message.getBody());
 			scheduler.schedule(itemBeans);
@@ -33,8 +34,3 @@ public DataListener(){
 		}
 	}
 }
-//end of DataListener.
-/* You can imagine the possibilities of using this listener to process jobs asynchronously. You can invoke a Spring Batch jobs if you want.
- * 
- * 
- * */

@@ -8,22 +8,22 @@ http://www.springframework.org/schema/rabbit http://www.springframework.org/sche
 		host="localhost" username="guest" password="guest" />
 
 	<rabbit:admin connection-factory="connectionFactory" />
-	<!-- Create myAnonymousQueue queue -->
-	<rabbit:queue id="myAnonymousQueue" />
-	<!--  create myExchange and bind myAnonymousQueue with my.routingkey.1 to the  DATA-EXCHANGE-->
-	<rabbit:topic-exchange id="myExchange" name="DATA-EXCHANGE">
+
+	<rabbit:queue id="myDownstreamQueue" />
+	<!--  create downstreamExchange and bind myDownstreamQueue with downstream.routingkey.1 to the  DATA-EXCHANGE-->
+	<rabbit:topic-exchange id="downstreamExchange" name="DATA-EXCHANGE">
 		<rabbit:bindings>
-			<rabbit:binding queue="myAnonymousQueue" pattern="my.#.*">
+			<rabbit:binding queue="myDownstreamQueue" pattern="downstream.#.*">
 			</rabbit:binding>
 		</rabbit:bindings>
 	</rabbit:topic-exchange>
-	
-	<!-- instantiate DataListener -->
-	<bean id="aListener" class="com.amazon.hack.amazing.amqp.DataListener" />
-	<!-- glue the listener and myAnonymousQueue  to the container-->
-	<rabbit:listener-container id="myListenerContainer"
-		connection-factory="connectionFactory">
-		<rabbit:listener ref="aListener" queues="myAnonymousQueue" />
+
+	<!-- instantiate DownstreamDataListener -->
+	<bean id="downstreamListener" class="com.amazon.hack.amazing.amqp.DownstreamDataListener" />
+	<!-- glue the listener and myDownstreamQueue  to the container-->
+	<rabbit:listener-container id="downstreamListenerContainer"
+							   connection-factory="connectionFactory">
+		<rabbit:listener ref="downstreamListener" queues="myDownstreamQueue" />
 	</rabbit:listener-container>
 
 </beans> 

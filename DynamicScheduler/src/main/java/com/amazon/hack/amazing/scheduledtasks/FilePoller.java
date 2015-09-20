@@ -1,5 +1,7 @@
 package com.amazon.hack.amazing.scheduledtasks;
 
+import com.amazon.hack.amazing.UpstreamServer;
+import com.amazon.hack.amazing.utils.FileProcessor;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.messaging.PollableChannel;
@@ -17,7 +19,7 @@ public class FilePoller {
     private Logger logger = Logger.getLogger(FilePoller.class.getSimpleName());
     private PollableChannel filesOutChannel;
 
-    @Scheduled(fixedRate = 360000)
+    @Scheduled(fixedRate = 60000)
     public void createFile() throws IOException, InterruptedException {
         logger.info("\n\n#### Starting Sequential processing test ####");
         logger.info("Populating directory with files");
@@ -31,16 +33,16 @@ public class FilePoller {
             logger.info(file.getAbsolutePath());
             BufferedWriter out = new BufferedWriter(new FileWriter(file));
             out.write("ITEM1,12345,4,Low,ITEM\n");
-            out.write("ITEM2,12346,1,High,PRICE\n");
-            out.write("ITEM3,12344,4,Low,AUX_ITEM\n");
-            out.write("ITEM4,12342,5,Lowest,ITEM\n");
-            out.write("ITEM2,12347,5,Lowest,ITEM\n");
-            out.write("ITEM3,12341,4,Highest,AUX_ITEM\n");
-            out.write("ITEM6,12349,4,Highest,AUX_ITEM\n");
-            out.write("ITEM3,23452,4,Highest,AUX_ITEM\n");
+            out.write("ITEM2,12345,1,High,PRICE\n");
+            out.write("ITEM2,12345,4,Low,AUX_ITEM\n");
+            out.write("ITEM4,12345,5,Lowest,ITEM\n");
+            out.write("ITEM2,12345,5,Lowest,ITEM\n");
+            out.write("ITEM3,12345,4,Highest,AUX_ITEM\n");
+            out.write("ITEM6,12345,4,Highest,AUX_ITEM\n");
+            out.write("ITEM3,12345,4,Highest,AUX_ITEM\n");
             out.write("ITEM1,12345,4,Normal,ITEM\n");
-            out.write("ITEM3,12346,4,Normal,ITEM\n");
-            out.write("ITEM1,12348,4,Normal,ITEM\n");
+            out.write("ITEM3,12345,4,Normal,ITEM\n");
+            out.write("ITEM1,12345,4,Normal,ITEM\n");
             out.write("ITEM2,12345,4,Low,ITEM");
             out.close();
         }
@@ -59,6 +61,15 @@ public class FilePoller {
             }
         } catch (NullPointerException ignored) {
 
+        }
+    }
+
+    @Scheduled(fixedRate = 5000)
+    public void pushItemsToQueue() {
+        if(FileProcessor.itemBeans != null && !FileProcessor.itemBeans.isEmpty()) {
+            //System.out.println("Sending ------ " + FileProcessor.itemBeans);
+            UpstreamServer.addToQueue(FileProcessor.itemBeans);
+            FileProcessor.itemBeans.clear();
         }
     }
 }

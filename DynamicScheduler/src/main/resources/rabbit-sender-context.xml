@@ -8,7 +8,7 @@ http://www.springframework.org/schema/rabbit http://www.springframework.org/sche
 	<!-- obtain admin rights to create the an exchange -->
 	<rabbit:admin connection-factory="connectionFactory" />
 	
-	<!-- create a bean which can send message to TUTORIAL_EXCHANGE for the Java program to call -->
+	<!-- create a bean which can send message to DATA_EXCHANGE for the Java program to call -->
 	<rabbit:template id="dataTemplate" connection-factory="connectionFactory"  exchange="DATA-EXCHANGE"/>
 </beans> 	
 <!-- end of rabbit-sender-context.xm  file -->

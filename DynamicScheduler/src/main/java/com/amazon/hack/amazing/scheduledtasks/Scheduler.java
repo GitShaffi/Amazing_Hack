@@ -56,9 +56,9 @@ public class Scheduler {
                 }
             }
         }
-        System.out.println("complete map == " + priorityMap);
+        //System.out.println("complete map == " + priorityMap);
         batchScheduler.createBatch(priorityMap);
-        System.out.println("Recycle list -- " + recycleItemList);
+       // System.out.println("Recycle list -- " + recycleItemList);
         if(recycleItemList!=null && !recycleItemList.isEmpty())
             UpstreamServer.addToQueue(recycleItemList);
         recycleItemList = null;

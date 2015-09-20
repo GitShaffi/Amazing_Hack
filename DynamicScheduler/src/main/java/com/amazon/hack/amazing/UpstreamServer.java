@@ -8,27 +8,36 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.List;
 
 /**
- * to the DATA-EXCHANGE configured in the rabbt-listener-contet.xml file with the routing key
+ * to the DATA-EXCHANGE configured in the rabbit-listener-contet.xml file with the routing key
  * "my.routingkey.1"
  */
 public class UpstreamServer {
 
-    private static AmqpTemplate mq;
+    private static AmqpTemplate itemBeanMq;
+    private static AmqpTemplate DownstreamMq;
 
     public static void main(String[] args) throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("rabbit-sender-context.xml");//loading beans
-        mq = (AmqpTemplate) context.getBean("dataTemplate");
+        itemBeanMq = (AmqpTemplate) context.getBean("dataTemplate");
 
 //		for (int i = 0; i < 10; i++)
-//			mq.convertAndSend("my.routingkey.1", "Message # " + i + " on " + new Date());// send
+//			itemBeanMq.convertAndSend("my.routingkey.1", "Message # " + i + " on " + new Date());// send
     }
 
     public static void addToQueue(List<ItemBean> bean) {
-        if (mq == null) {
+        if (itemBeanMq == null) {
             ApplicationContext context = new ClassPathXmlApplicationContext("rabbit-sender-context.xml");//loading beans
-            mq = (AmqpTemplate) context.getBean("dataTemplate");
+            itemBeanMq = (AmqpTemplate) context.getBean("dataTemplate");
         }
-        mq.convertAndSend("my.routingkey.1", bean);
+        itemBeanMq.convertAndSend("my.routingkey.1", bean);
+    }
+
+    public static void pushToDownstream(List<ItemBean> bean) {
+        if (DownstreamMq == null) {
+            ApplicationContext context = new ClassPathXmlApplicationContext("rabbit-sender-context.xml");//loading beans
+            DownstreamMq = (AmqpTemplate) context.getBean("dataTemplate");
+        }
+        DownstreamMq.convertAndSend("downstream.routingkey.1", bean);
     }
 }
 //end of UpstreamServer
