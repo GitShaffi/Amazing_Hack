@@ -1,6 +1,6 @@
 # Dynamic Scheduling Microservice
 
-We have designed a distributing system which transfers batch request to downstream systems based on priority with several contraints like Item is being unique along with merchant id, market place id and data type being other fields for streamlining. Batch are created in a way like it will be containing only a maximum of 10 requests of merchant id per hour.
+We have designed a distributing system which transfers batch request to downstream systems based on priority with several constraints like Item is being unique along with merchant id, market place id and data type being other fields for streamlining. Batch are created in a way like it will be containing only a maximum of 10 requests of merchant id per hour.
 
 Instructions to run:
 
